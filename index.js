@@ -1,6 +1,11 @@
 import { select } from 'd3'
 import { prepareData, transformData } from './prepareData';
 
+//Title case function for axis title formatting
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 //Both json and csv gist urls -- set up for json currently
 const dataUrl = 'https://gist.githubusercontent.com/aulichney/d4589c85658f1a2248b143dfd62005b4/raw/1b7c1826210517d3baa7c687de2b21e11ccdb1bf/undercustodymod.json'
 //const dataUrl = 'https://gist.githubusercontent.com/aulichney/f60a198f6551aaafd29a91c56f70a184/raw/7e3cfb21baa0e3b6d6b3f86cae58b36bdb46ecdc/undercustodymod.csv'
@@ -116,7 +121,7 @@ function setupAxes(){
       .attr("x",0 - (height / 2))
       .attr("dy", "1em")
       .style("text-anchor", "middle")
-      .text("Title");
+      .text(capitalizeFirstLetter(yVar));
 }
 
 //Create preference options based on dataset variables
