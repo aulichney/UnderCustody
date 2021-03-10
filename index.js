@@ -1,4 +1,4 @@
-import { select } from 'd3'
+import { select, remove } from 'd3'
 import { prepareData, transformData } from './prepareData';
 
 //Title case function for axis title formatting
@@ -10,12 +10,14 @@ function capitalizeFirstLetter(string) {
 const dataUrl = 'https://gist.githubusercontent.com/aulichney/d4589c85658f1a2248b143dfd62005b4/raw/1b7c1826210517d3baa7c687de2b21e11ccdb1bf/undercustodymod.json'
 //const dataUrl = 'https://gist.githubusercontent.com/aulichney/f60a198f6551aaafd29a91c56f70a184/raw/7e3cfb21baa0e3b6d6b3f86cae58b36bdb46ecdc/undercustodymod.csv'
 const svg = select('svg')
-const margin = {top: 48, right: 72, bottom: 120, left: 72}
+const margin = {top: 40, right: 72, bottom: 190, left: 72}
 const height = parseInt(svg.style('height'), 10) - margin.top - margin.bottom
 const width = parseInt(svg.style('width'), 10) - margin.left - margin.right
 const group = svg
   .append('g')
-  .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+  .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+//const ylabel =  document.querySelector('ylabel');
+
 
 // Set up bands and gaps between bands
 const x = d3.scaleBand().padding(0.2)
@@ -54,15 +56,18 @@ function selectionChangedY(){
     .attr('y', d => y(d.value[yVar]))
     .attr('height', d => height - y(d.value[yVar]))
   svg.select('.axis-y')
-      .call(d3.axisLeft(y).ticks(10))
+      .call(d3.axisLeft(y).ticks(10));
+  group.select('.ylabel')
+    	.remove();
   group
   	.append("text")
     .attr("transform", "rotate(-90)")
+  	.attr('class', 'ylabel')
     .attr("y", 0 - margin.left)
     .attr("x",0 - (height / 2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .text(capitalizeFirstLetter(yVar))
+    .text(capitalizeFirstLetter(yVar));
 }
 
 //Change x axis upon user input variable
@@ -74,7 +79,7 @@ function selectionChangedX(){
     .sort((a,b) => d3.ascending(parseInt(a.key), parseInt(b.key)))
   x.domain(nestedData.map(item => item.key))
   // Change domain with new y max
-  y.domain([0, d3.max( nestedData.map(preference => preference.value[yVar]) )] );
+  y.domain([0, d3.max(nestedData.map(preference => preference.value[yVar]) )] );
   const bars = group.selectAll('.bar')
   	.data(nestedData)
 	console.log(bars)
@@ -97,11 +102,21 @@ function selectionChangedX(){
   bars
     .exit()
     .remove()
-  //Update Axes ticks
+  //Update Axes ticks and label
   svg.select('.axis-x')
-      .call(d3.axisBottom(x)).attr('transform', 'translate(0,' + height + ')')
+      .call(d3.axisBottom(x)).attr('transform', 'translate(0,' + (height) + ')')
   svg.select('.axis-y')
       .call(d3.axisLeft(y).ticks(10))
+  group.select('.xlabel')
+    	.remove()
+  group
+  	.append("text")
+  	.attr('class', 'xlabel')
+    .attr("y", 0+ height)
+    .attr("x",0 + width/2 )
+    .attr("dy", "3em")
+    .style("text-anchor", "middle")
+    .text(capitalizeFirstLetter(xVar));
 }
 
 function setupScales(){
@@ -117,20 +132,28 @@ function setupAxes(){
   group
     .append('g')
     .attr('class', 'axis axis-x')
-  	.call(d3.axisBottom(x)).attr('transform', 'translate(0,' + height + ')')
+  	.call(d3.axisBottom(x)).attr('transform', 'translate(0,' + (height - margin.bottom) + ')')
   group
     .append('g')
     .attr('class', 'axis axis-y')
   	.call(d3.axisLeft(y).ticks(10))
   group
-    .append("text")
+  	.append("text")
+  	.attr('class', 'ylabel')
     .attr("transform", "rotate(-90)")
     .attr("y", 0 - margin.left)
     .attr("x",0 - (height / 2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .text(capitalizeFirstLetter(yVar);
-}
+    .text(capitalizeFirstLetter(yVar))
+  group
+  	.append("text")
+  	.attr('class', 'xlabel')
+    .attr("y", 0+ height)
+    .attr("x",0 + width/2 )
+    .attr("dy", "3em")
+    .style("text-anchor", "middle")
+    .text(capitalizeFirstLetter(xVar));
 }
 
 //Create preference options based on dataset variables
