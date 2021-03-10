@@ -55,6 +55,14 @@ function selectionChangedY(){
     .attr('height', d => height - y(d.value[yVar]))
   svg.select('.axis-y')
       .call(d3.axisLeft(y).ticks(10))
+  group
+  	.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x",0 - (height / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text(capitalizeFirstLetter(yVar))
 }
 
 //Change x axis upon user input variable
@@ -115,13 +123,14 @@ function setupAxes(){
     .attr('class', 'axis axis-y')
   	.call(d3.axisLeft(y).ticks(10))
   group
-  		.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left)
-      .attr("x",0 - (height / 2))
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text(capitalizeFirstLetter(yVar));
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x",0 - (height / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text(capitalizeFirstLetter(yVar);
+}
 }
 
 //Create preference options based on dataset variables

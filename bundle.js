@@ -29,7 +29,7 @@
         }
       })
   		.entries(source);
-    console.log("transformed data:", transformed);
+    //console.log("transformed data:", transformed)
     return transformed
   }
 
@@ -47,6 +47,11 @@
       ethnicity: row.ethnicGroup
 
     }
+  }
+
+  //Title case function for axis title formatting
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   //Both json and csv gist urls -- set up for json currently
@@ -98,6 +103,14 @@
       .attr('height', d => height - y(d.value[yVar]));
     svg.select('.axis-y')
         .call(d3.axisLeft(y).ticks(10));
+    group
+    	.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text(capitalizeFirstLetter(yVar));
   }
 
   //Change x axis upon user input variable
@@ -157,14 +170,14 @@
       .append('g')
       .attr('class', 'axis axis-y')
     	.call(d3.axisLeft(y).ticks(10));
-    group
-    		.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left)
-        .attr("x",0 - (height / 2))
-        .attr("dy", "1em")
-        .style("text-anchor", "middle")
-        .text("Title");
+      group
+    	.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text(capitalizeFirstLetter(yVar));
   }
 
   //Create preference options based on dataset variables
