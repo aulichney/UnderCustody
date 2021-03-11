@@ -24,7 +24,8 @@ export function transformData(source, nestingVar){
   	.rollup(d => {
       return {
         amount: d.length,
-				ageAvg: d3.mean(d.map(correspondent => correspondent.age))
+				ageAvg: d3.mean(d.map(correspondent => correspondent.age)),
+        avgTimeServed: d3.mean(d.map(correspondent => correspondent.timeServed))
       }
     })
 		.entries(source);
@@ -42,7 +43,8 @@ function cleanData(row){
   return {
     sex: row.sex,
     age: Number(row.age),
-    raceEthnicity: row.raceEthnicity
+    raceEthnicity: row.raceEthnicity,
+    timeServed: row.timeServed
 
   }
 }
