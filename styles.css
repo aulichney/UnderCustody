@@ -16,3 +16,7 @@ form {
   left: 16px;
   top: 16px;
 }
+
+td, th {
+  padding: 1px 4px;
+}

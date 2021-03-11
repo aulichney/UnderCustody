@@ -7,8 +7,9 @@ function capitalizeFirstLetter(string) {
 }
 
 //Both json and csv gist urls -- set up for json currently
-const dataUrl = 'https://gist.githubusercontent.com/aulichney/d4589c85658f1a2248b143dfd62005b4/raw/1b7c1826210517d3baa7c687de2b21e11ccdb1bf/undercustodymod.json'
+const dataUrl = 'https://gist.githubusercontent.com/aulichney/d4589c85658f1a2248b143dfd62005b4/raw/5c95164db1fa7369dd12d67b7e7bf62244e576ba/undercustodymod.json'
 //const dataUrl = 'https://gist.githubusercontent.com/aulichney/f60a198f6551aaafd29a91c56f70a184/raw/7e3cfb21baa0e3b6d6b3f86cae58b36bdb46ecdc/undercustodymod.csv'
+
 const svg = select('svg')
 const margin = {top: 40, right: 72, bottom: 190, left: 72}
 const height = parseInt(svg.style('height'), 10) - margin.top - margin.bottom
@@ -16,7 +17,6 @@ const width = parseInt(svg.style('width'), 10) - margin.left - margin.right
 const group = svg
   .append('g')
   .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-//const ylabel =  document.querySelector('ylabel');
 
 
 // Set up bands and gaps between bands

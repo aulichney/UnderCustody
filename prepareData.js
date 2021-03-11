@@ -28,7 +28,7 @@ export function transformData(source, nestingVar){
       }
     })
 		.entries(source);
-  console.log("transformed data:", transformed)
+  //console.log("transformed data:", transformed)
   return transformed
 }
 
@@ -42,8 +42,7 @@ function cleanData(row){
   return {
     sex: row.sex,
     age: Number(row.age),
-    race: row.race,
-    ethnicity: row.ethnicGroup
+    raceEthnicity: row.raceEthnicity
 
   }
 }

@@ -3,10 +3,10 @@
 ## To Do:
 - Change "y-axis" and "x-axis" text to be outside the dropdown
 - Eliminate entries with no info for selected variables before plotting to prevent empty bars
-- Join race and ethnicity
 - Sort bars into descending
 - Bin age on x axis
 - Add summary tables
+- Add sentence length
 - CSV data input
 
 ## Credit
