@@ -7,7 +7,7 @@ function capitalizeFirstLetter(string) {
 }
 
 //Both json and csv gist urls -- set up for json currently
-const dataUrl = 'https://gist.githubusercontent.com/aulichney/d4589c85658f1a2248b143dfd62005b4/raw/5c95164db1fa7369dd12d67b7e7bf62244e576ba/undercustodymod.json'
+const dataUrl = 'https://gist.githubusercontent.com/aulichney/d4589c85658f1a2248b143dfd62005b4/raw/767be748b7cb3e067aacfc625c045847a73c003f/undercustodymod.json'
 //const dataUrl = 'https://gist.githubusercontent.com/aulichney/f60a198f6551aaafd29a91c56f70a184/raw/7e3cfb21baa0e3b6d6b3f86cae58b36bdb46ecdc/undercustodymod.csv'
 
 const svg = select('svg')
