@@ -6,9 +6,7 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-//Both json and csv gist urls -- set up for json currently
 const dataUrl = 'https://gist.githubusercontent.com/aulichney/d4589c85658f1a2248b143dfd62005b4/raw/767be748b7cb3e067aacfc625c045847a73c003f/undercustodymod.json'
-//const dataUrl = 'https://gist.githubusercontent.com/aulichney/f60a198f6551aaafd29a91c56f70a184/raw/7e3cfb21baa0e3b6d6b3f86cae58b36bdb46ecdc/undercustodymod.csv'
 
 const svg = select('svg')
 const margin = {top: 40, right: 72, bottom: 190, left: 72}
@@ -22,6 +20,7 @@ const group = svg
 // Set up bands and gaps between bands
 const x = d3.scaleBand().padding(0.2)
 const y = d3.scaleLinear()
+
 // Store  raw unnested & nested data globally, avoid passing  to every function
 let unNestedData
 let nestedData
@@ -112,7 +111,7 @@ function selectionChangedX(){
   group
   	.append("text")
   	.attr('class', 'xlabel')
-    .attr("y", 0+ height)
+    .attr("y", 0 + height)
     .attr("x",0 + width/2 )
     .attr("dy", "3em")
     .style("text-anchor", "middle")
