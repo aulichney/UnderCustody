@@ -2,14 +2,38 @@ setwd("/Users/annieulichney/Desktop")
 library(rjson)
 library(lubridate)
 library(rbin)
+library(stringr)
 
 #Read in data
-data <- read.csv("undercustodydata.csv")
+data1 <- read.csv("undercustodydata.csv")
+geo <- read.csv("undercustodygeo.csv")
+
+#create unique variables to use for merging
+data1$fullname <- paste(data1$first.name, data1$last.name, sep = "")
+data1$namedob <- paste(data1$fullname, data1$date.of.birth, sep = "")
+data1$id <- paste(data1$namedob, data1$original.reception.date, sep = "")
+data1$id <- gsub(" ", "", data1$id)
+
+geo$fullname <- paste(geo$firstName, geo$lastName, sep = "")
+geo$dob <- gsub("-", "", geo$dob)
+geo$namedob <- paste(geo$fullname, geo$dob, sep = "")
+geo$id <- paste(geo$namedob, geo$originalReceptionDate, sep = "")
+geo$id <- gsub(" ", "", geo$id)
+
+#merge
+data <- merge(data1, geo, by = 'id')
+
+#rename columns
+names(data)[names(data) == 'sex.x'] <- 'sex'
+names(data)[names(data) == 'race.x'] <- 'race'
+names(data)[names(data) == 'original.reception.date.x'] <- 'original.reception.date'
 
 
 #eliminate unneeded cols
-keep = c("last.name" , "first.name", "sex" , "date.of.birth", "ethnic.group", "race", "original.reception.date", "maximum.expiration.date",  "code.owning.facility.name")
+keep = c("last.name" , "first.name", "sex" , "date.of.birth", "ethnic.group", "race", "original.reception.date", "maximum.expiration.date",  "code.owning.facility.name", "crimeCounty", "downstateResident", "nycResident")
+
 data <-subset(data, select = keep)
+
 
 #Extract dates
 data$date.of.birth <- ymd(data$date.of.birth)
@@ -43,62 +67,35 @@ data$sex[data$sex == ' ' & data$code.owning.facility.name == 'BED HIL RECP'] <- 
 #remove facility name
 data <- data[ , !(names(data) %in% c('code.owning.facility.name'))]
 
-#round age and time served to whole number
-data$age <- round(data$age,0)
-#round age and time served to whole number
-data$time.served <- round(data$time.served,0)
-
 #bin age data
-a = c(18,24,34,50,64,91)
+a = c(18,24,34,50,64,92)
 data$age.binned <- cut(data$age, a, labels = c("18-24", "25-34","35-49","50-64","65+"))
 
 #bin time served data
 breaks = c(0,5,10,15,20,25,30,35,40,45,50,55,60)
 data$time.served.binned <- cut(data$time.served, breaks, labels = c("0-5","6-10","11-15","16-20","21-25","26-30","31-35","36-40","41-45","46-50","51-55","56-60"))
 
+#round age and time served to whole number
+data$age <- round(data$age,0)
+#round age and time served to whole number
+data$time.served <- round(data$time.served,0)
+
+#titlecase vars
+data$crimeCounty <- str_to_title(data$crimeCounty)
+data$downstateResident <- str_to_title(data$downstateResident)
+
 #rename columns to eliminate periods
-colnames(data)[1] <- 'lastName'
-colnames(data)[2] <- 'firstName'
-colnames(data)[4] <- 'dob'
-colnames(data)[5] <- 'ethnicGroup'
-colnames(data)[7] <- 'originalReceptionDate'
-colnames(data)[8] <- 'maximumExpirationDate'
-colnames(data)[10] <- 'timeServed'
-colnames(data)[12] <- 'timeServedBinned'
-colnames(data)[13] <- 'ageBinned'
+names(data)[names(data) == 'last.name'] <- 'lastName'
+names(data)[names(data) == 'first.name'] <- 'firstName'
+names(data)[names(data) == 'date.of.birth'] <- 'dob'
+names(data)[names(data) == 'ethnic.group'] <- 'ethnicGroup'
+names(data)[names(data) == 'original.receptionDate'] <- 'originalReceptionDate'
+names(data)[names(data) == 'maximum.expiration.date'] <- 'maximumExpirationDate'
+names(data)[names(data) == 'time.served'] <- 'timeServed'
+names(data)[names(data) == 'age.binned'] <- 'ageBinned'
+names(data)[names(data) == 'time.served.binned'] <- 'timeServedBinned'
 
 
 #Write CSV
-write.csv(data,"/Users/annieulichney/Desktop/undercustodybinned.csv", row.names = FALSE)
-
-# #Write JSON
-# write(toJSON(data), 'undercustodymod.json')
-
-
-# dfFreq <- function(data,myName=""){
-#   ctTable <- table(data)
-#   sumTable <- sum(ctTable)
-#   oCtTable <- order(ctTable,decreasing = T)
-#   dfTableCt <- as.data.frame(ctTable[oCtTable])
-#   TableDec <-prop.table(ctTable[oCtTable])
-#   
-#   TablePct  <- round(100*TableDec,1)
-#   sumTablePct <- sum(TablePct)
-#   dfTableRaw <- cbind(TablePct,dfTableCt)
-#   colnames(dfTableRaw) <- c(myName,"pct",paste0(myName,"1"),"count")
-#   myCat <- levels(dfTableRaw[,1])[dfTableRaw[,1]]
-#   dfTable <- data.frame(pct=c(TablePct,sumTablePct),count=c(dfTableCt[,2],sumTable),row.names=c(names(TableDec),"Sum"))
-#   return(dfTable)
-# }
-# 
-# #frequency tables as df to later write as csv
-# sexfreq <- data.frame(dfFreq(data$sex))
-# agefreq <- data.frame(dfFreq(data$age))
-# racefreq <- data.frame(dfFreq(data$race))
-# ethnicGroupfreq <- data.frame(dfFreq(data$ethnicGroup))
-# 
-
-
-#Write csv
-#write.csv(sexfreq,"/Users/annieulichney/Desktop/sex.csv", row.names = TRUE)
+#write.csv(data,"/Users/annieulichney/Desktop/undercustodygeo.csv", row.names = FALSE)
 
